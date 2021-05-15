@@ -7,7 +7,7 @@ from goturn import TrackerGOTURN
 
 if __name__ == '__main__':
     # setup tracker
-    net_path = "../checkpoints/pytorch_goturn.pth.tar"
+    net_path = '/content/drive/My Drive/Goturnreproduce/pytorch_goturn.pth.tar'
     tracker = TrackerGOTURN(net_path=net_path)
 
     # setup experiments
