@@ -13,10 +13,12 @@ if __name__ == '__main__':
     # setup experiments
     # got10k toolkit expects either extracted directories or zip files for
     # all sequences in OTB data directory
+   # experiments = [
+   #     ExperimentOTB('../data/OTB', version=2013),
+   #     ExperimentOTB('../data/OTB', version=2015)
+   # ]
     experiments = [
-        ExperimentOTB('../data/OTB', version=2013),
-        ExperimentOTB('../data/OTB', version=2015)
-    ]
+        ExperimentOTB('../data/OTB', version=2013)]
 
     # run tracking experiments and report performance
     for e in experiments:
