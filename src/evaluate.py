@@ -18,7 +18,7 @@ if __name__ == '__main__':
    #     ExperimentOTB('../data/OTB', version=2015)
    # ]
     experiments = [
-        ExperimentOTB('../data/OTB', version=2013)]
+        ExperimentOTB('/content/drive/My Drive/Goturnreproduce/data1', version=2013)]
 
     # run tracking experiments and report performance
     for e in experiments:
