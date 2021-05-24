@@ -65,8 +65,8 @@ class GoNet(nn.Module):
         cat = torch.zeros(x.shape)
         xx = torch.zeros(x.shape)
         yy = torch.zeros(y.shape)
-        print('x',x.shape)
-        print('y',y.shape)
+        #print('x',x.shape)
+        #print('y',y.shape)
         for i in range(x.shape[0]):
             xx[i,0] = x[i,0]-torch.mean(x[i,0])
             xx[i,1] = x[i,1]-torch.mean(x[i,1])
@@ -77,16 +77,16 @@ class GoNet(nn.Module):
         for i in range(x.shape[0]):
             a=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
             a[0]= xx[i,:,:,:]
-            print('a', a.shape)
+            #print('a', a.shape)
             b=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
             b[0]= yy[i,:,:,:]
-            print('b',b.shape)
+            #print('b',b.shape)
             conv = F.conv2d(a, torch.transpose(b,0,1), padding = int(xx.shape[2]/2), groups=3)
-            print('conv', conv.shape)
+            #print('conv', conv.shape)
             conv2 = conv[:,:,:xx.shape[2],:xx.shape[2]]
-            print('conv2', conv2.shape)
-            print('cati', cat[i].shape)
-            print('cat', cat.shape)
+            #print('conv2', conv2.shape)
+            #print('cati', cat[i].shape)
+            #print('cat', cat.shape)
             cat[i] = conv2
 
 
