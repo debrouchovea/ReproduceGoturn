@@ -65,6 +65,7 @@ class GoNet(nn.Module):
         cat = torch.zeros(x.shape)
         xx = torch.zeros(x.shape)
         yy = torch.zeros(y.shape)
+        """
         #print('x',x.shape)
         #print('y',y.shape)
         for i in range(x.shape[0]):
@@ -88,15 +89,17 @@ class GoNet(nn.Module):
             #print('cati', cat[i].shape)
             #print('cat', cat.shape)
             cat[i] = conv2
-
-
-        x3 = self.convnetcorr(cat)
+        """
+        print('cat', cat.shape)
+        print('x', x.shape)
+        x3 = self.convnetcorr(x)
         x3 = x3.view(x.size(0), 256*6*6)
         ###
         x1 = self.convnet(x)
         x1 = x1.view(x.size(0), 256*6*6)
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 256*6*6)
+        x3=x1
         x = torch.cat((x1, x2,x3), 1)
         x = self.classifier(x)
         return x
