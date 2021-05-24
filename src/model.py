@@ -81,9 +81,9 @@ class GoNet(nn.Module):
             b=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
             b[0]= yy[i,:,:,:]
             print('b',b.shape)
-            conv = F.conv2d(a, torch.transpose(b,0,1), padding = 128, groups=3)
+            conv = F.conv2d(a, torch.transpose(b,0,1), padding = int(xx.shape[2]/2), groups=3)
             print('conv', conv.shape)
-            conv2 = conv[:,:,:256,:256]
+            conv2 = conv[:,:,:xx.shape[2],:xx.shape[2]]
             print('conv2', conv2.shape)
             print('cati', cat[i].shape)
             print('cat', cat.shape)
