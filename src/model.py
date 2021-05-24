@@ -92,8 +92,8 @@ class GoNet(nn.Module):
             #print('cat', cat.shape)
             cat[i] = conv2[0]
         
-        print('cat', cat.shape)
-        print('x', x.shape)
+        #print('cat', cat.shape)
+        #print('x', x.shape)
         x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         ###
