@@ -33,7 +33,7 @@ class GoNet(nn.Module):
         caffenetcorr = models.alexnet(pretrained=True)
         self.convnetcorr = nn.Sequential(*list(caffenetcorr.children())[:-1])
         for param in self.convnetcorr.parameters():
-            param.requires_grad = False 
+            param.requires_grad = True 
         ###
         self.classifier = nn.Sequential(
                 nn.Linear(256*6*6*3, 4096), #
