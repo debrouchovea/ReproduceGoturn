@@ -62,9 +62,11 @@ class GoNet(nn.Module):
     def forward(self, x, y):
         
         ###
-        cat = torch.zeros(x.shape)
-        xx = torch.zeros(x.shape)
-        yy = torch.zeros(y.shape)
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+        cat = torch.zeros(x.shape).to(device)
+        xx = torch.zeros(x.shape).to(device)
+        yy = torch.zeros(y.shape).to(device)
         
         #print('x',x.shape)
         #print('y',y.shape)
@@ -76,15 +78,15 @@ class GoNet(nn.Module):
             yy[i,1] = y[i,1]-torch.mean(y[i,1])
             yy[i,2] = y[i,2]-torch.mean(y[i,2])
         for i in range(x.shape[0]):
-            a=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
+            a=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]]).to(device)
             a[0]= xx[i,:,:,:]
             #print('a', a.shape)
-            b=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
+            b=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]]).to(device)
             b[0]= yy[i,:,:,:]
             #print('b',b.shape)
-            conv = F.conv2d(a, torch.transpose(b,0,1), padding = int(xx.shape[2]/2), groups=3)
+            conv = F.conv2d(a, torch.transpose(b,0,1), padding = int(xx.shape[2]/2), groups=3).to(device)
             #print('conv', conv.shape)
-            conv2 = conv[:,:,:xx.shape[2],:xx.shape[2]]
+            conv2 = conv[:,:,:xx.shape[2],:xx.shape[2]].to(device)
             #print('conv2', conv2.shape)
             #print('cati', cat[i].shape)
             #print('cat', cat.shape)
