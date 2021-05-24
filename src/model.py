@@ -33,7 +33,7 @@ class GoNet(nn.Module):
         caffenetcorr = models.alexnet(pretrained=True)
         self.convnetcorr = nn.Sequential(*list(caffenetcorr.children())[:-1])
         for param in self.convnetcorr.parameters():
-            param.requires_grad = True 
+            param.requires_grad = False 
         ###
         self.classifier = nn.Sequential(
                 nn.Linear(256*6*6*3, 4096), #
@@ -65,7 +65,7 @@ class GoNet(nn.Module):
         cat = torch.zeros(x.shape)
         xx = torch.zeros(x.shape)
         yy = torch.zeros(y.shape)
-        """
+        
         #print('x',x.shape)
         #print('y',y.shape)
         for i in range(x.shape[0]):
@@ -88,11 +88,11 @@ class GoNet(nn.Module):
             #print('conv2', conv2.shape)
             #print('cati', cat[i].shape)
             #print('cat', cat.shape)
-            cat[i] = conv2
-        """
+            cat[i] = conv2[0]
+        
         print('cat', cat.shape)
         print('x', x.shape)
-        x3 = self.convnetcorr(x)
+        x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         ###
         x1 = self.convnet(x)
