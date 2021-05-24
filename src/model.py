@@ -69,11 +69,14 @@ class GoNet(nn.Module):
             xx[i,0] = x[i,0]-torch.mean(x[i,0])
             xx[i,1] = x[i,1]-torch.mean(x[i,1])
             xx[i,2] = x[i,2]-torch.mean(x[i,2])
+            yy[i,0] = y[i,0]-torch.mean(y[i,0])
+            yy[i,1] = y[i,1]-torch.mean(y[i,1])
+            yy[i,2] = y[i,2]-torch.mean(y[i,2])
         for i in range(x.shape[0]):
             a=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
-            a[0]= xx[:,i,:,:]
+            a[0]= xx[i,:,:,:]
             b=torch.zeros([1, xx.shape[1], xx.shape[2], xx.shape[3]])
-            b[0]= yy[:,i,:,:]
+            b[0]= yy[i,:,:,:]
             conv = F.conv2d(a, torch.transpose(b,0,1), padding = 128, groups=3)
             conv2 = conv[:,:,:256,:256]
             cat[i] = conv2
