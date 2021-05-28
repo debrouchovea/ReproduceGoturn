@@ -3,7 +3,7 @@ import argparse
 
 import torch
 import cv2
-
+import numpy as np
 from test import GOTURN
 
 args = None
@@ -75,7 +75,7 @@ def main(args):
     # save initial frame with bounding box
     save(tester.img[0][0], tester.prev_rect, tester.prev_rect, 1)
     tester.model.eval()
-
+    av = np.zeros(tester.len)
     # loop through sequence images
     for i in range(tester.len):
         # get torch input tensor
@@ -90,11 +90,15 @@ def main(args):
         im = tester.img[i][1]
         save(im, bb, gt_bb, i+2)
 
-        # print stats
-        print('frame: %d, IoU = %f' % (
-            i+2, axis_aligned_iou(gt_bb, bb)))
-
-
+        if i%20 ==0:
+            # print stats
+            print('frame: %d, IoU = %f' % (
+                i+2, axis_aligned_iou(gt_bb, bb)))
+        av[i] = axis_aligned_iou(gt_bb, bb)
+    print('=======================================')
+    print("Average : ", np.average(av))
+    print('=======================================')
+    
 if __name__ == "__main__":
     args = parser.parse_args()
     main(args)
