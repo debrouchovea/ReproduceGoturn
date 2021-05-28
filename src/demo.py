@@ -97,6 +97,13 @@ def main(args):
         av[i] = axis_aligned_iou(gt_bb, bb)
     print('=======================================')
     print("Average : ", np.average(av))
+    count = 0.0
+    amount = 0.0
+    for q in range(len(av)):
+        if av[q] != 0.0:
+            amount = amount+1.0
+            count = count+ av[q]
+    print('Average without 0 : ', count/amount)
     print('=======================================')
     
 if __name__ == "__main__":
