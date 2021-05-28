@@ -8,7 +8,7 @@ from goturn import TrackerGOTURN
 if __name__ == '__main__':
     # setup tracker
     # net_path = '/content/drive/My Drive/Goturnreproduce/pytorch_goturn.pth.tar'
-    net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/model_itr_15000_loss_95.172.pth.tar'
+    net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/model_itr_90000_loss_41.181.pth.tar'
     tracker = TrackerGOTURN(net_path=net_path)
 
     # setup experiments
