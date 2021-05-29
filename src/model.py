@@ -30,12 +30,12 @@ class GoNet(nn.Module):
         for param in self.convnet.parameters():
             param.requires_grad = False
         ###
-        """
+        
         caffenetcorr = models.alexnet(pretrained=True)
         self.convnetcorr = nn.Sequential(*list(caffenetcorr.children())[:-1])
         for param in self.convnetcorr.parameters():
             param.requires_grad = True 
-        """
+        
         ###
         self.classifier = nn.Sequential(
                 nn.Linear(256*6*6*2, 4096), #
@@ -62,7 +62,7 @@ class GoNet(nn.Module):
                 m.weight.data.normal_(0, 0.005)
 
     def forward(self, x, y):
-        """
+        
         ###
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -99,12 +99,11 @@ class GoNet(nn.Module):
         x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         ###
-        """
         x1 = self.convnet(x)
         x1 = x1.view(x.size(0), 256*6*6)
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 256*6*6)
-        x3=x1
-        x = torch.cat((x1, x2), 1)
+        
+        x = torch.cat((x1, x2,x3), 1)
         x = self.classifier(x)
         return x
