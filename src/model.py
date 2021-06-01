@@ -25,8 +25,8 @@ class GoNet(nn.Module):
     """
     def __init__(self):
         super(GoNet, self).__init__()
-        #caffenet = models.alexnet(pretrained=True)
-        caffenet = models.vgg16(pretrained=True)
+        caffenet = models.alexnet(pretrained=True)
+        #caffenet = models.vgg16(pretrained=True)
         self.convnet = nn.Sequential(*list(caffenet.children())[:-1])
         for param in self.convnet.parameters():
             param.requires_grad = False
@@ -98,9 +98,10 @@ class GoNet(nn.Module):
         x3 = x3.view(x.size(0), 256*6*6)
         """
         x1 = self.convnet(x)
-        x1 = x1.view(x.size(0), 512*7*7)
+        x1 = x1.view(x.size(0), 256*6*6)
         x2 = self.convnet(y)
-        x2 = x2.view(x.size(0), 512*7*7)
+        x2 = x2.view(x.size(0), 256*6*6)
+        
         
         x = torch.cat((x1, x2), 1)
         x = self.classifier(x)
