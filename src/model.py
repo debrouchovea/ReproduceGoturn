@@ -37,8 +37,8 @@ class GoNet(nn.Module):
             param.requires_grad = True 
         """
         self.classifier = nn.Sequential(
-                #nn.Linear(256*6*6*2, 4096), #
-                nn.Linear(512*7*7*2, 4096), #
+                nn.Linear(256*6*6*2, 4096), #
+                #nn.Linear(512*7*7*2, 4096), #
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
@@ -101,7 +101,7 @@ class GoNet(nn.Module):
         x1 = x1.view(x.size(0), 256*6*6)
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 256*6*6)
-        
+
         
         x = torch.cat((x1, x2), 1)
         x = self.classifier(x)
