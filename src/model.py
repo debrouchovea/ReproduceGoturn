@@ -28,10 +28,10 @@ class GoNet(nn.Module):
         #caffenet = models.alexnet(pretrained=True)
         #caffenet = models.vgg16(pretrained=True)
         #caffenet = models.shufflenet_v2_x0_5(pretrained=True) #ouput 1024*7*7
-        #caffenet = models.mobilenet_v2(pretrained=True) #output maybe 1*1*1280
+        caffenet = models.mobilenet_v2(pretrained=True) #output maybe 1*1*1280
         #caffenet = models.mnasnet0_5(pretrained = True) #output should be 7*7*320
         #caffenet = models.resnet18(pretrained = True) #512*2
-        caffenet = models.resnet50(pretrained = True)
+        #caffenet = models.resnet50(pretrained = True)
         self.convnet = nn.Sequential(*list(caffenet.children())[:-1])
         for param in self.convnet.parameters():
             param.requires_grad = False
@@ -42,9 +42,10 @@ class GoNet(nn.Module):
             param.requires_grad = True 
         """
         self.classifier = nn.Sequential(
-                nn.Linear(2048*2, 4096),
+                #nn.Linear(2048*2, 4096),
                 #nn.Linear(256*6*6*2, 4096), #
                 #nn.Linear(512*7*7*2, 4096), #
+                nn.Linear(1280*2, 4096) #mobilenet
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
@@ -103,12 +104,12 @@ class GoNet(nn.Module):
         x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         """
-        #print(x.shape)
+        print(x.shape)
         x1 = self.convnet(x)
-        #print(x1.shape)
-        x1 = x1.view(x.size(0), 2048) #512) #256*6*6)
+        print(x1.shape)
+        x1 = x1.view(x.size(0), 1280) #512) #256*6*6)
         x2 = self.convnet(y)
-        x2 = x2.view(x.size(0), 2048) #256*6*6)
+        x2 = x2.view(x.size(0), 1280) #256*6*6)
 
         
         x = torch.cat((x1, x2), 1)
