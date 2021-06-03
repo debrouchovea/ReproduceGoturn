@@ -104,9 +104,9 @@ class GoNet(nn.Module):
         x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         """
-        print(x.shape)
+        #print(x.shape)
         x1 = self.convnet(x)
-        print(x1.shape)
+        #print(x1.shape)
         x1 = x1.view(x.size(0), 1280*7*7) #512) #256*6*6)
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 1280*7*7) #256*6*6)
