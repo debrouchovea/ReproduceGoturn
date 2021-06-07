@@ -46,7 +46,7 @@ class GoNet(nn.Module):
                 #nn.Linear(256*6*6*2, 4096), #
                 #nn.Linear(512*7*7*2, 4096), #
                 #nn.Linear(1280*7*7*2, 4096), #mobilenet
-                nn.Linear(7*7*320*2,4096) #mnasnet
+                nn.Linear(7*7*320*2,4096), #mnasnet
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
