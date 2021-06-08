@@ -42,7 +42,7 @@ class GoNet(nn.Module):
             param.requires_grad = True 
         """
         self.classifier = nn.Sequential(
-                nn.Linear(2048*2, 4096),
+                nn.Linear(256*6*6*2, 4096),
                 #nn.Linear(256*6*6*2, 4096), #
                 #nn.Linear(512*7*7*2, 4096), #
                 #nn.Linear(1280*7*7*2, 4096), #mobilenet
@@ -108,9 +108,9 @@ class GoNet(nn.Module):
         #print(x.shape)
         x1 = self.convnet(x)
         #print(x1.shape)
-        x1 = x1.view(x.size(0), 2048) #7*7*1280)#1280*7*7) #512) #256*6*6)
+        x1 = x1.view(x.size(0), 256*6*6)  #7*7*1280)#1280*7*7) #512) #256*6*6)
         x2 = self.convnet(y)
-        x2 = x2.view(x.size(0), 2048) #1280*7*7) #256*6*6)
+        x2 = x2.view(x.size(0), 256*6*6)  #1280*7*7) #256*6*6)
 
         
         x = torch.cat((x1, x2), 1)
