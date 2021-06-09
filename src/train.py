@@ -283,8 +283,9 @@ def train_model(model, datasets, criterion, optimizer):
                 curr_loss = loss.item()
                 end = time.time()
                 itr = itr + 1
-                print('[training] step = %d/%d, loss = %f, time = %f'
-                      % (itr, args.num_batches, curr_loss, end-st))
+                if itr%20==0:
+                    print('[training] step = %d/%d, loss = %f, time = %f'
+                          % (itr, args.num_batches, curr_loss, end-st))
                 sys.stdout.flush()
                 del(train_batch)
                 st = time.time()
