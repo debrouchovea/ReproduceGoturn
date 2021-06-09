@@ -41,6 +41,58 @@ class GoNet(nn.Module):
         for param in self.convnetcorr.parameters():
             param.requires_grad = True 
         """
+
+        ####my creation
+        size_input = 7*7*1280*2
+
+        self.layer10 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer11 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer12 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer13 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer14 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer15 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer16 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer17 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer18 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer19 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer110 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer111 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer112 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer113 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer114 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer115 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
+        self.layer116 = nn.Linear(math.ceil(size_input/20), 204, bias=True)
+        self.layer117 = nn.Linear(math.ceil(size_input/20), 204, bias=True)
+        self.layer118 = nn.Linear(math.ceil(size_input/20), 204, bias=True)
+        self.layer119 = nn.Linear(math.ceil(size_input/20), 204, bias=True)
+
+        self.classifier = nn.Sequential(
+                #nn.Linear(256*6*6*2, 4096),
+                #nn.Linear(256*6*6*2, 4096), #
+                #nn.Linear(512*7*7*2, 4096), #
+                #nn.Linear(1280*7*7*2, 4096), #mobilenet
+                #nn.Linear(7*7*1280*2,4096), #mnasnet
+                #nn.Linear(1024, 4096), #resnet50
+                nn.ReLU(inplace=True),
+                nn.Dropout(),
+                nn.Linear(4096, 4096),
+                nn.ReLU(inplace=True),
+                nn.Dropout(),
+                nn.Linear(4096, 4096),
+                nn.ReLU(inplace=True),
+                nn.Dropout(),
+                nn.Linear(4096, 4),
+                )
+        self.weight_init()
+
+
+
+
+
+
+
+
+        """
         self.classifier = nn.Sequential(
                 #nn.Linear(256*6*6*2, 4096),
                 #nn.Linear(256*6*6*2, 4096), #
@@ -59,7 +111,7 @@ class GoNet(nn.Module):
                 nn.Linear(4096, 4),
                 )
         self.weight_init()
-
+        """
     def weight_init(self):
         for m in self.classifier.modules():
             # fully connected layers are weight initialized with
@@ -109,11 +161,42 @@ class GoNet(nn.Module):
         #print(x.shape)
         x1 = self.convnet(x)
         #print(x1.shape)
-        x1 = x1.view(x.size(0),512) #6*6*256 ) #512*7*7)  #7*7*1280)#1280*7*7) #512) #256*6*6)
+        x1 = x1.view(x.size(0),7*7*1280) #6*6*256 ) #512*7*7)  #7*7*1280)#1280*7*7) #512) #256*6*6)
         x2 = self.convnet(y)
-        x2 = x2.view(x.size(0), 512) #6*6*256) #512*7*7)  #1280*7*7) #256*6*6)
+        x2 = x2.view(x.size(0), 7*7*1280) #6*6*256) #512*7*7)  #1280*7*7) #256*6*6)
 
         
-        x = torch.cat((x1, x2), 1)
+        features = torch.cat((x1, x2), 1)
+
+        #My creation
+        sz = 7*7*1280*2
+        szz = 6272 
+           
+        x10 = self.layer10(features[0, szz])          
+        x11 = self.layer11(features[szz, 2*szz])          
+        x12 = self.layer12(features[2*szz, 3*szz])          
+        x13 = self.layer13(features[3*szz, 4*szz])          
+        x14 = self.layer14(features[4*szz, 5*szz])          
+        x15 = self.layer15(features[5*szz, 6*szz])          
+        x16 = self.layer16(features[6*szz, 7*szz])          
+        x17 = self.layer17(features[7*szz, 8*szz])          
+        x18 = self.layer18(features[8*szz,9*szz ])          
+        x19 = self.layer19(features[9*szz, 10*szz ])          
+        x110 = self.layer110(features[10*szz, 11*szz])          
+        x111 = self.layer111(features[11*szz, 12*szz])          
+        x112 = self.layer112(features[12*szz, 13*szz])          
+        x113 = self.layer113(features[13*szz, 14*szz])          
+        x114 = self.layer114(features[14*szz, 15*szz])          
+        x115 = self.layer115(features[15*szz, 16*szz])          
+        x116 = self.layer116(features[16*szz, 17*szz]) 
+        x117 = self.layer117(features[17*szz, 18*szz]) 
+        x118 = self.layer118(features[18*szz, 19*szz])  
+        x119 = self.layer119(features[19*szz, 20*szz])   
+        x = torch.cat((x10,x11,x12,x13,x14,x15,x16,x17,x18,x19, x110,x111,x112,x113,x114,x115,x116,x117,x118,x119), 1)
+
+
+
+
+
         x = self.classifier(x)
         return x
