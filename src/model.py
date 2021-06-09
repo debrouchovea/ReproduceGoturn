@@ -192,7 +192,7 @@ class GoNet(nn.Module):
         x117 = self.layer117(features[: , 17*szz : 18*szz]) 
         x118 = self.layer118(features[: , 18*szz : 19*szz])  
         x119 = self.layer119(features[: , 19*szz : 20*szz])   
-        x = torch.cat((x10,x11,x12,x13,x14,x15,x16,x17,x18,x19, x110,x111,x112,x113,x114,x115,x116,x117,x118,x119))
+        x = torch.cat((x10,x11,x12,x13,x14,x15,x16,x17,x18,x19, x110,x111,x112,x113,x114,x115,x116,x117,x118,x119), 1)
 
 
 
