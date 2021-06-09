@@ -2,7 +2,7 @@ import torch
 from torchvision import models
 import torch.nn as nn
 import torch.nn.functional as F
-
+import math 
 
 class GoNet(nn.Module):
     """ Neural Network class
