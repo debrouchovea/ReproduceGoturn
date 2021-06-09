@@ -29,8 +29,8 @@ class GoNet(nn.Module):
         #caffenet = models.vgg16(pretrained=True)
         #caffenet = models.shufflenet_v2_x0_5(pretrained=True) #ouput 1024*7*7
         #caffenet = models.mobilenet_v2(pretrained=True) #output maybe 7*7*1280
-        #caffenet = models.mnasnet0_5(pretrained = True) #output should be 7*7*1280
-        caffenet = models.resnet18(pretrained = True) #512*2
+        caffenet = models.mnasnet0_5(pretrained = True) #output should be 7*7*1280
+        #caffenet = models.resnet18(pretrained = True) #512*2
         #caffenet = models.resnet50(pretrained = True) #1024
         self.convnet = nn.Sequential(*list(caffenet.children())[:-1])
         for param in self.convnet.parameters():
