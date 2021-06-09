@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # net_path = '/content/drive/My Drive/Goturnreproduce/pytorch_goturn.pth.tar'
     #net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/model_itr_90000_loss_41.181.pth.tar'
     #net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/mobilenet/model_itr_190000_loss_51.125.pth.tar'
-    net_path = '/content/drive/My Drive/Goturnreproduce/pytorch_goturn.pth.tar'
+    net_path = '/content/drive/My Drive/Goturnreproduce/model_itr_92000_loss_38.078.pth.tar'
     tracker = TrackerGOTURN(net_path=net_path)
 
     # setup experiments
