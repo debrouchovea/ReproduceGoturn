@@ -25,8 +25,8 @@ class GoNet(nn.Module):
     """
     def __init__(self):
         super(GoNet, self).__init__()
-        caffenet = models.alexnet(pretrained=True)
-        #caffenet = models.vgg16(pretrained=True)
+        #caffenet = models.alexnet(pretrained=True)
+        caffenet = models.vgg16(pretrained=True)
         #caffenet = models.shufflenet_v2_x0_5(pretrained=True) #ouput 1024*7*7
         #caffenet = models.mobilenet_v2(pretrained=True) #output maybe 7*7*1280
         #caffenet = models.mnasnet0_5(pretrained = True) #output should be 7*7*1280
