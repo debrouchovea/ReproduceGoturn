@@ -21,7 +21,7 @@ if __name__ == '__main__':
    #     ExperimentOTB('../data/OTB', version=2015)
    # ]
     experiments = [
-        ExperimentOTB(root_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/OTB', result_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/vgg16 results', report_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/VGG16 report', version=2013)]
+        ExperimentOTB(root_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/OTB', result_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/resnet results', report_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/resnet report', version=2013)]
 
     # run tracking experiments and report performance
     for e in experiments:
