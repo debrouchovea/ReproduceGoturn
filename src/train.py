@@ -66,6 +66,64 @@ parser.add_argument('--save-freq', default=20000, type=int,
                     help='save checkpoint frequency (default: 20000)')
 
 
+def Interction_Union(outputs, targets):
+	#outputs = [x, y, w, h], [50,4]
+	width_o = outputs[:, 2]
+	width_t = targets[:, 2]
+	height_o = outputs[:, 3]
+	height_t = targets[:, 3]
+
+	#print("targets ", targets[0,:])
+	#print("width_o ",width_o)
+	#print("width_t ",width_t)
+	#print("height_o ", height_o)
+	#print("height_t ",height_t)
+	x_max = torch.max(torch.stack((outputs[:,0]+outputs[:, 2]/2, targets[:,0]+targets[:, 2]/2), 1), 1)[0]
+	x_min = torch.min(torch.stack((outputs[:,0]-outputs[:, 2]/2, targets[:,0]-targets[:, 2]/2), 1), 1)[0]
+	y_max = torch.max(torch.stack((outputs[:,1]+outputs[:, 3]/2, targets[:,1]+targets[:, 3]/2), 1), 1)[0]
+	y_min = torch.min(torch.stack((outputs[:,1]-outputs[:, 3]/2, targets[:,1]-targets[:, 3]/2), 1), 1)[0]
+
+	Area_o = torch.mul(width_o, height_o)
+	Area_t = torch.mul(width_t, height_t)
+
+	Inter_w = torch.add(width_o, width_t).sub(x_max.sub(x_min))
+	Inter_t = torch.add(height_o, height_t).sub(y_max.sub(y_min))
+		
+	Inter = torch.mul(Inter_w, Inter_t)
+	zeros = torch.zeros_like(Inter)
+	Inter = torch.where(Inter < 0, zeros, Inter)
+		
+	Union = torch.add(Area_o, Area_t).sub(Inter)	
+	
+	return Inter, Union, x_max, x_min, y_max, y_min
+def Center_points(outputs, targets):
+	
+	x_o = outputs[:,0]
+	y_o = outputs[:,1]
+	x_t = targets[:,0]
+	y_t = targets[:,1]
+
+	return x_o, y_o, x_t, y_t
+
+
+class IoU_loss(torch.nn.Module):
+	def __init__(self):
+		super().__init__()
+	
+	def forward(self, outputs, targets):
+
+		Inter, Union, _, _, _, _ = Interction_Union(outputs, targets)
+		zeros = torch.zeros_like(Inter)
+		#print(Inter)
+		#print(Union)
+		loss = torch.div(Inter, Union)
+		
+		loss = 1 - loss
+		#print(loss)
+		loss = torch.where(loss < 0, zeros, loss)
+		#print(loss)
+		
+		return torch.sum(loss)	
 def main():
 
     global args, batchSize, kSaveModel, bb_params
@@ -105,8 +163,8 @@ def main():
     # load model
     net = model.GoNet().to(device)
     # summary(net, [(3, 224, 224), (3, 224, 224)])
-    loss_fn = torch.nn.L1Loss(size_average=False).to(device)
-
+    #loss_fn = torch.nn.L1Loss(size_average=False).to(device)
+    loss_fn = IoU_loss().to(device)
     # initialize optimizer
     optimizer = optim.SGD(net.classifier.parameters(),
                           lr=args.learning_rate,
