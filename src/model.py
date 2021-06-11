@@ -41,7 +41,7 @@ class GoNet(nn.Module):
         for param in self.convnetcorr.parameters():
             param.requires_grad = True 
         """
-
+        """
         ####my creation
         size_input = 7*7*1280*2
 
@@ -85,21 +85,16 @@ class GoNet(nn.Module):
                 )
         self.weight_init()
 
-
-
-
-
-
-
-
         """
+
+
         self.classifier = nn.Sequential(
                 #nn.Linear(256*6*6*2, 4096),
                 #nn.Linear(256*6*6*2, 4096), #
                 #nn.Linear(512*7*7*2, 4096), #
                 #nn.Linear(1280*7*7*2, 4096), #mobilenet
-                #nn.Linear(7*7*1280*2,4096), #mnasnet
-                nn.Linear(1024, 4096), #resnet50
+                nn.Linear(7*7*1280*2,4096), #mnasnet
+                #nn.Linear(1024, 4096), #resnet50
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
@@ -111,7 +106,7 @@ class GoNet(nn.Module):
                 nn.Linear(4096, 4),
                 )
         self.weight_init()
-        """
+        
     def weight_init(self):
         for m in self.classifier.modules():
             # fully connected layers are weight initialized with
@@ -124,7 +119,7 @@ class GoNet(nn.Module):
 
     def forward(self, x, y):
         
-        """
+        """ used to do the image correlation
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         cat = torch.zeros(x.shape).to(device)
         xx = torch.zeros(x.shape).to(device)
@@ -165,9 +160,9 @@ class GoNet(nn.Module):
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 7*7*1280) #6*6*256) #512*7*7)  #1280*7*7) #256*6*6)
 
-        
-        features = torch.cat((x1, x2), 1)
-
+        x= torch.cat((x1,x2),1)
+        #features = torch.cat((x1, x2), 1)
+        """used to experiment if "fully connected layer grouping" would work (sadly not)
         #My creation
         sz = 7*7*1280*2
         szz = 6272 
@@ -193,9 +188,7 @@ class GoNet(nn.Module):
         x118 = self.layer118(features[: , 18*szz : 19*szz])  
         x119 = self.layer119(features[: , 19*szz : 20*szz])   
         x = torch.cat((x10,x11,x12,x13,x14,x15,x16,x17,x18,x19, x110,x111,x112,x113,x114,x115,x116,x117,x118,x119), 1)
-
-
-
+        """
 
 
         x = self.classifier(x)
