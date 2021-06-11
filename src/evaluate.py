@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # net_path = '/content/drive/My Drive/Goturnreproduce/pytorch_goturn.pth.tar'
     #net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/model_itr_90000_loss_41.181.pth.tar'
     #net_path='/content/drive/My Drive/Goturnreproduce/Checkpoints/mobilenet/model_itr_190000_loss_51.125.pth.tar'
-    net_path = '/content/drive/My Drive/Goturnreproduce/Checkpoints/resnet/model_itr_85000_loss_163.542.pth.tar'
+    net_path = '/content/drive/My Drive/Goturnreproduce/Checkpoints/mnasnetv2/model_itr_145000_loss_109.934.pth.tar'
     tracker = TrackerGOTURN(net_path=net_path)
 
     # setup experiments
@@ -21,7 +21,7 @@ if __name__ == '__main__':
    #     ExperimentOTB('../data/OTB', version=2015)
    # ]
     experiments = [
-        ExperimentOTB(root_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/OTB', result_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/resnet results', report_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/resnet report', version=2013)]
+        ExperimentOTB(root_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/OTB', result_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/mnasnetv2 results', report_dir = '/content/drive/My Drive/Goturnreproduce/DataEvaluate/mnasnetv2 report', version=2013)]
 
     # run tracking experiments and report performance
     for e in experiments:
