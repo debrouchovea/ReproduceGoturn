@@ -25,24 +25,27 @@ class GoNet(nn.Module):
     """
     def __init__(self):
         super(GoNet, self).__init__()
-        #caffenet = models.alexnet(pretrained=True)
-        #caffenet = models.vgg16(pretrained=True)
-        #caffenet = models.shufflenet_v2_x0_5(pretrained=True) #ouput 1024*7*7
-        #caffenet = models.mobilenet_v2(pretrained=True) #output maybe 7*7*1280
-        caffenet = models.mnasnet0_5(pretrained = True) #output should be 7*7*1280
-        #caffenet = models.resnet18(pretrained = True) #512*2
-        #caffenet = models.resnet50(pretrained = True) #1024
+
+        #CHOSE THE PRETRAINED MODEL YOU WANT TO USE (UNCOMMENT IT)
+        #caffenet = models.alexnet(pretrained=True) #(256*6*6)
+        #caffenet = models.vgg16(pretrained=True) #(7*7*512)
+        #caffenet = models.shufflenet_v2_x0_5(pretrained=True) #(1024*7*7)
+        #caffenet = models.mobilenet_v2(pretrained=True) # (7*7*1280)
+        caffenet = models.mnasnet0_5(pretrained = True) #( 7*7*1280)
+        #caffenet = models.resnet18(pretrained = True) #(512*2)
+        #caffenet = models.resnet50(pretrained = True) #(1024)
         self.convnet = nn.Sequential(*list(caffenet.children())[:-1])
         for param in self.convnet.parameters():
             param.requires_grad = False
-        """
+        
+        """ #USED WITH CORRELATION OF TWO IMAGES
         caffenetcorr = models.alexnet(pretrained=False)
         self.convnetcorr = nn.Sequential(*list(caffenetcorr.children())[:-1])
         for param in self.convnetcorr.parameters():
             param.requires_grad = True 
         """
         """
-        ####my creation
+        #### GROUP CONNECTED LAYER
         size_input = 7*7*1280*2
 
         self.layer10 = nn.Linear(math.ceil(size_input/20), 205, bias=True)
@@ -87,14 +90,13 @@ class GoNet(nn.Module):
 
         """
 
-
+        #UNCOMMENT DEPENDING ON THE PRETRAINED NETWORK YOU CHOSE
         self.classifier = nn.Sequential(
-                #nn.Linear(256*6*6*2, 4096),
-                #nn.Linear(256*6*6*2, 4096), #
-                #nn.Linear(512*7*7*2, 4096), #
-                #nn.Linear(1280*7*7*2, 4096), #mobilenet
-                nn.Linear(7*7*1280*2,4096), #mnasnet
-                #nn.Linear(1024, 4096), #resnet50
+                #nn.Linear(256*6*6*2, 4096), #ALEXNET
+                #nn.Linear(512*7*7*2, 4096), #VGG16
+                #nn.Linear(1280*7*7*2, 4096), #MOBILENET
+                nn.Linear(7*7*1280*2,4096), #MNASNET
+                #nn.Linear(1024, 4096), #RESNET50 AND RESNET18  
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
@@ -119,7 +121,7 @@ class GoNet(nn.Module):
 
     def forward(self, x, y):
         
-        """ used to do the image correlation
+        """ USED TO DO IMAGE CORRELATION
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         cat = torch.zeros(x.shape).to(device)
         xx = torch.zeros(x.shape).to(device)
@@ -153,17 +155,20 @@ class GoNet(nn.Module):
         x3 = self.convnetcorr(cat)
         x3 = x3.view(x.size(0), 256*6*6)
         """
-        #print(x.shape)
+
         x1 = self.convnet(x)
-        #print(x1.shape)
-        x1 = x1.view(x.size(0),7*7*1280) #6*6*256 ) #512*7*7)  #7*7*1280)#1280*7*7) #512) #256*6*6)
+        #CHANGE DEPENDING ON THE OUTPUT SIZE OF THE PRETRAINED MODEL YOU USED (SEE COMMENTS ABOVE)
+        x1 = x1.view(x.size(0),7*7*1280) #6*6*256) #512*7*7)  #7*7*1280)#1280*7*7) #512) #256*6*6)
         x2 = self.convnet(y)
         x2 = x2.view(x.size(0), 7*7*1280) #6*6*256) #512*7*7)  #1280*7*7) #256*6*6)
 
         x= torch.cat((x1,x2),1)
-        #features = torch.cat((x1, x2), 1)
+        
+        
         """used to experiment if "fully connected layer grouping" would work (sadly not)
         #My creation
+        #features = torch.cat((x1, x2), 1)
+
         sz = 7*7*1280*2
         szz = 6272 
            
