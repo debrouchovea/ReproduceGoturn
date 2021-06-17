@@ -417,7 +417,7 @@ if enable_tensorboard:
 
 args = None
 parser = argparse.ArgumentParser(description='GOTURN Training')
-parser.add_argument('-n', '--num-batches', default=10001, type=int,
+parser.add_argument('-n', '--num-batches', default=30001, type=int,
                     help='number of total batches to run')
 parser.add_argument('-lr', '--learning-rate', default=1e-5, type=float,
                     help='initial learning rate')
@@ -630,10 +630,10 @@ def main():
     # summary(net, [(3, 224, 224), (3, 224, 224)])
     #loss_fn = torch.nn.L1Loss(size_average=False).to(device)
     #loss_fn = torch.nn.SmoothL1Loss(size_average=False).to(device)
-    #loss_fn = IoU_loss().to(device)
+    loss_fn = IoU_loss().to(device)
     #loss_fn = GIoU_loss().to(device)
     #loss_fn = DIoU_loss().to(device)
-    loss_fn = CIoU_loss().to(device)
+    #loss_fn = CIoU_loss().to(device)
     
 
     # initialize optimizer
@@ -820,8 +820,9 @@ def train_model(model, datasets, criterion, optimizer):
                 end = time.time()
                 itr = itr + 1
                 loss_total[itr-1] = curr_loss
-                print('[training] step = %d/%d, loss = %f, time = %f'
-                      % (itr, args.num_batches, curr_loss, end-st))
+                if itr%20==0:
+                    print('[training] step = %d/%d, loss = %f, time = %f'
+                          % (itr, args.num_batches, curr_loss, end-st))
                 sys.stdout.flush()
                 del(train_batch)
                 st = time.time()
